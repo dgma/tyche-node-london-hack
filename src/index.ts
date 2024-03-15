@@ -2,15 +2,16 @@
 // import { multicall } from "./contracts";
 import {getCexPrice} from "./getCexPrice";
 import {canCommit, commit} from "./commit";
-import {canReveal, reveal} from "./reveal";
+import {canReveal, reveal} from "./reveal"
 
 async function main() {
   initCommitReveal();
 }
 
 function initCommitReveal() {
-  setInterval(async() => {
+  let commitInterval: ReturnType<typeof setInterval> = setInterval(async() => {
     if(await canCommit()) {
+      clearInterval(commitInterval)
       const price = await getCexPrice();
       const currentSecret = crypto.randomUUID();
       await commit(price, currentSecret);
@@ -24,6 +25,7 @@ function setReveal(price: number, secret: string) {
     if(await canReveal()) {
      await reveal(price, secret);
      clearInterval(checker);
+     initCommitReveal();
     }
   }, 60000)
 }

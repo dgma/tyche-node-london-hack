@@ -1,9 +1,10 @@
 import {coinmarketcapKey} from "./env";
+import {formatUnits} from "viem";
 
-let cexPrice: number | null = null;
-export const getCexPrice = async (): number => {
+let cexPrice: string | null = null;
+export const getCexPrice = async (): string => {
   if(!cexPrice) await fetchCexPrice();
-  return cexPrice as number;
+  return cexPrice as string;
 }
 
 const fetchCexPrice = async () => {
@@ -20,5 +21,7 @@ const fetchCexPrice = async () => {
 }
 
 const setPrice = (payload: Record<string, any>): void => {
-  cexPrice = payload.data['1027'].quote['USD'].price;
+  const price = payload.data['1027'].quote['USD'].price as number;
+  const bigIntPrice = BigInt(price);
+  cexPrice = formatUnits(bigIntPrice, 8);
 }

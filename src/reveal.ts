@@ -1,6 +1,6 @@
 import oracle from "./contracts/oracle";
 
-export const reveal = (price: number, secret: string) => {
+export const reveal = (price: string, secret: string) => {
   return oracle.reveal(price, secret);
 }
 
