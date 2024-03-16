@@ -1,6 +1,6 @@
 import * as crypto from "crypto";
 import chalk from "chalk";
-import { encodeAbiParameters, keccak256, parseAbiParameters, toHex } from "viem";
+import { encodeAbiParameters, keccak256, parseAbiParameters } from "viem";
 
 import { account, httpPublicClient, walletClient } from "./config";
 import * as OracleContract from "./contracts/oracle";
@@ -18,14 +18,14 @@ const waitForCommitPhase = () => {
       log("Commiting price...");
       clearInterval(intervalId);
       const priceInfo = await multisourcePriceProvider.getPriceInfo();
-      const seed = crypto.randomUUID();
+      const seed = BigInt(crypto.randomInt(281474976710655));
       await commit(priceInfo.price ?? 0n, seed);
       waitForRevealPhase(priceInfo.price ?? 0n, seed);
     }
   }, 10000);
 };
 
-const waitForRevealPhase = async (price: bigint, secret: string) => {
+const waitForRevealPhase = async (price: bigint, secret: bigint) => {
   log("Waiting for REVEAL phase ⏳");
 
   const intervalId = setInterval(async () => {
@@ -56,7 +56,7 @@ const canReveal = async () => {
   return response as boolean;
 };
 
-const commit = async (price: bigint, secret: string): Promise<void> => {
+const commit = async (price: bigint, secret: bigint): Promise<void> => {
   const { request } = await httpPublicClient.simulateContract({
     ...OracleContract,
     account,
@@ -69,12 +69,12 @@ const commit = async (price: bigint, secret: string): Promise<void> => {
   log(`Commited price "${price}"" ✅`);
 };
 
-const reveal = async (price: bigint, secret: string) => {
+const reveal = async (price: bigint, secret: bigint) => {
   const { request } = await httpPublicClient.simulateContract({
     ...OracleContract,
     account,
     functionName: "reveal",
-    args: [price, secret],
+    args: [secret, price],
   });
 
   await walletClient.writeContract(request);
@@ -82,8 +82,15 @@ const reveal = async (price: bigint, secret: string) => {
   log("Price revealed 🃏");
 };
 
-const getCommitHash = (price: bigint, secret: string): string => {
-  return keccak256(encodeAbiParameters(parseAbiParameters("uint256 price, bytes32 secret"), [price, toHex(secret)]));
+const getCommitHash = (price: bigint, secret: bigint): string => {
+  const encodedAbiParameters = encodeAbiParameters(parseAbiParameters("uint256 price, uint256 secret"), [
+    price,
+    secret,
+  ]);
+
+  const hash = keccak256(encodedAbiParameters);
+
+  return hash;
 };
 
 function log(message: string) {
