@@ -8,81 +8,115 @@ services:
     env_file:
       - .env
       - src/oracle-nodes/node1/.env
+    restart: always
   node2:
     build: .
+    depends_on: 
+     - node1
     command: node oracle-nodes/node2
     ports: ["4002:4002"]
     env_file:
       - .env
       - src/oracle-nodes/node2/.env
+    restart: always
   node3:
     build: .
+    depends_on: 
+     - node2
     command: node oracle-nodes/node3
     ports: ["4003:4003"]
     env_file:
       - .env
       - src/oracle-nodes/node3/.env
+    restart: always
   node4:
     build: .
+    depends_on: 
+     - node3
     command: node oracle-nodes/node2
     ports: ["4004:4004"]
     env_file:
       - .env
       - src/oracle-nodes/node3/.env
+    restart: always
   node5:
     build: .
+    depends_on: 
+     - node4
     command: node oracle-nodes/node5
     ports: ["4005:4005"]
     env_file:
       - .env
       - src/oracle-nodes/node5/.env
+    restart: always
   node6:
     build: .
+    depends_on: 
+     - node5
     command: node oracle-nodes/node6
     ports: ["4006:4006"]
     env_file:
       - .env
       - src/oracle-nodes/node6/.env
+    restart: always
   node7:
     build: .
+    depends_on: 
+     - node6
     command: node oracle-nodes/node7
     ports: ["4007:4007"]
     env_file:
       - .env
       - src/oracle-nodes/node7/.env
+    restart: always
   node8:
     build: .
+    depends_on: 
+     - node7
     command: node oracle-nodes/node8
     ports: ["4008:4008"]
     env_file:
       - .env
       - src/oracle-nodes/node8/.env
+    restart: always
   node9:
     build: .
+    depends_on: 
+     - node8
     command: node oracle-nodes/node9
     ports: ["4009:4009"]
     env_file:
       - .env
       - src/oracle-nodes/node9/.env
+    restart: always
   node10:
     build: .
+    depends_on: 
+     - node9
     command: node oracle-nodes/node10
     ports: ["4010:4010"]
     env_file:
       - .env
       - src/oracle-nodes/node10/.env
+    restart: always
   node11:
     build: .
+    depends_on: 
+     - node10
     command: node oracle-nodes/node11
     ports: ["4011:4011"]
     env_file:
       - .env
       - src/oracle-nodes/node11/.env
+    restart: always
   node12:
     build: .
+    depends_on: 
+     - node11
     command: node oracle-nodes/node12
     ports: ["4012:4012"]
     env_file:
       - .env
       - src/oracle-nodes/node12/.env
+    restart: always
 

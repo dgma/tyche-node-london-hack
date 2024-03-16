@@ -8,8 +8,21 @@ import * as multisourcePriceProvider from "./multisource-price-provider";
 
 const INTERVAL_MS = 3000;
 
-export const start = () => {
-  waitForCommitPhase();
+const register = async () => {
+  log("Register Node..");
+  const { request } = await httpPublicClient.simulateContract({
+    ...OracleContract,
+    account,
+    functionName: "register",
+  });
+
+  await walletClient.writeContract(request);
+  log("Done ✅");
+};
+
+export const start = async () => {
+  await register();
+  return waitForCommitPhase();
 };
 
 const waitForCommitPhase = () => {
@@ -43,6 +56,7 @@ const waitForRevealPhase = async (price: bigint, secret: bigint) => {
 const canCommit = async (): Promise<boolean> => {
   const response = await httpPublicClient.readContract({
     ...OracleContract,
+    account,
     functionName: "canCommit",
   });
 
@@ -52,6 +66,7 @@ const canCommit = async (): Promise<boolean> => {
 const canReveal = async () => {
   const response = await httpPublicClient.readContract({
     ...OracleContract,
+    account,
     functionName: "canReveal",
   });
 
