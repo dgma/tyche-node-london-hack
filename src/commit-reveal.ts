@@ -2,7 +2,7 @@ import * as crypto from "crypto";
 import chalk from "chalk";
 import { encodeAbiParameters, keccak256, parseAbiParameters, toHex } from "viem";
 
-import { httpPublicClient } from "./clients";
+import { account, httpPublicClient, walletClient } from "./config";
 import * as OracleContract from "./contracts/oracle";
 import * as multisourcePriceProvider from "./multisource-price-provider";
 
@@ -18,9 +18,9 @@ const waitForCommitPhase = () => {
       log("Commiting price...");
       clearInterval(intervalId);
       const priceInfo = await multisourcePriceProvider.getPriceInfo();
-      const secret = crypto.randomUUID();
-      await commit(priceInfo.price ?? 0n, secret);
-      waitForRevealPhase(priceInfo.price ?? 0n, secret);
+      const seed = crypto.randomUUID();
+      await commit(priceInfo.price ?? 0n, seed);
+      waitForRevealPhase(priceInfo.price ?? 0n, seed);
     }
   }, 10000);
 };
@@ -56,20 +56,32 @@ const canReveal = async () => {
   return response as boolean;
 };
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const commit = async (price: bigint, secret: string): Promise<void> => {
-  // return oracle.commit(getCommitHash(price, secret));
+  const { request } = await httpPublicClient.simulateContract({
+    ...OracleContract,
+    account,
+    functionName: "commit",
+    args: [getCommitHash(price, secret)],
+  });
+
+  await walletClient.writeContract(request);
+
   log(`Commited price "${price}"" ✅`);
 };
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const reveal = (price: bigint, secret: string) => {
-  // return oracle.reveal(encodeAbiParameters(parseAbiParameters('uint256 price, bytes32 secret'),
-  //     [price, toHex(secret)]));
+const reveal = async (price: bigint, secret: string) => {
+  const { request } = await httpPublicClient.simulateContract({
+    ...OracleContract,
+    account,
+    functionName: "reveal",
+    args: [price, secret],
+  });
+
+  await walletClient.writeContract(request);
+
   log("Price revealed 🃏");
 };
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const getCommitHash = (price: bigint, secret: string): string => {
   return keccak256(encodeAbiParameters(parseAbiParameters("uint256 price, bytes32 secret"), [price, toHex(secret)]));
 };
