@@ -1,13 +1,19 @@
-import {keccak256, toHex} from 'viem'
+import {encodeAbiParameters, keccak256, parseAbiParameters, toHex} from 'viem'
 import oracle from "./contracts/oracle";
-const getCommitHash = (price: string, secret: string): string => {
-  return keccak256(toHex(`${price}${secret}`));
+const getCommitHash = (price: bigint, secret: string): string => {
+
+  return keccak256(encodeAbiParameters(parseAbiParameters('uint256 price, bytes32 secret'),
+    [price, toHex(secret)]));
 }
 
 export const canCommit = async (): Promise<boolean> => {
-  return oracle.read.canCommit();
+  console.log('can commit')
+  return Promise.resolve(true);
+  // return oracle.read.canCommit();
 }
 
-export const commit = async (price: string, secret: string): Promise<void> => {
-  return oracle.commit(getCommitHash(price, secret));
+export const commit = async (price: bigint, secret: string): Promise<void> => {
+  console.log('commiting', price,'****', secret)
+  return Promise.resolve();
+  // return oracle.commit(getCommitHash(price, secret));
 }

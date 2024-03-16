@@ -1,11 +1,18 @@
 // import { httpPublicClient } from "./clients";
 // import { multicall } from "./contracts";
-import {getCexPrice} from "./getCexPrice";
+import {fetchCexPrice, getCexPrice} from "./getCexPrice";
 import {canCommit, commit} from "./commit";
 import {canReveal, reveal} from "./reveal"
 
 async function main() {
+  initPriceUpdate();
   initCommitReveal();
+}
+
+function initPriceUpdate() {
+  setInterval(async() => {
+    await fetchCexPrice();
+  }, 5000)
 }
 
 function initCommitReveal() {
@@ -17,17 +24,17 @@ function initCommitReveal() {
       await commit(price, currentSecret);
       setReveal(price, currentSecret);
     }
-  }, 60000);
+  }, 6000);
 }
 
-function setReveal(price: number, secret: string) {
+function setReveal(price: bigint, secret: string) {
   let checker = setInterval(async () => {
     if(await canReveal()) {
      await reveal(price, secret);
      clearInterval(checker);
      initCommitReveal();
     }
-  }, 60000)
+  }, 6000)
 }
 
 main();
