@@ -1,450 +1,179 @@
-import { getContract } from "viem";
-import { httpClient } from "../clients";
-import {oracleAddress} from "../env";
+export const address = "0x4A04237FD080A6123f394de010EBd5651297c6F4";
 
-const abi = [
+export const abi = [
   {
-    inputs: [
-      {
-        components: [
-          {
-            internalType: "address",
-            name: "target",
-            type: "address",
-          },
-          {
-            internalType: "bytes",
-            name: "callData",
-            type: "bytes",
-          },
-        ],
-        internalType: "struct Multicall3.Call[]",
-        name: "calls",
-        type: "tuple[]",
-      },
-    ],
-    name: "aggregate",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "blockNumber",
-        type: "uint256",
-      },
-      {
-        internalType: "bytes[]",
-        name: "returnData",
-        type: "bytes[]",
-      },
-    ],
-    stateMutability: "payable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        components: [
-          {
-            internalType: "address",
-            name: "target",
-            type: "address",
-          },
-          {
-            internalType: "bool",
-            name: "allowFailure",
-            type: "bool",
-          },
-          {
-            internalType: "bytes",
-            name: "callData",
-            type: "bytes",
-          },
-        ],
-        internalType: "struct Multicall3.Call3[]",
-        name: "calls",
-        type: "tuple[]",
-      },
-    ],
-    name: "aggregate3",
-    outputs: [
-      {
-        components: [
-          {
-            internalType: "bool",
-            name: "success",
-            type: "bool",
-          },
-          {
-            internalType: "bytes",
-            name: "returnData",
-            type: "bytes",
-          },
-        ],
-        internalType: "struct Multicall3.Result[]",
-        name: "returnData",
-        type: "tuple[]",
-      },
-    ],
-    stateMutability: "payable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        components: [
-          {
-            internalType: "address",
-            name: "target",
-            type: "address",
-          },
-          {
-            internalType: "bool",
-            name: "allowFailure",
-            type: "bool",
-          },
-          {
-            internalType: "uint256",
-            name: "value",
-            type: "uint256",
-          },
-          {
-            internalType: "bytes",
-            name: "callData",
-            type: "bytes",
-          },
-        ],
-        internalType: "struct Multicall3.Call3Value[]",
-        name: "calls",
-        type: "tuple[]",
-      },
-    ],
-    name: "aggregate3Value",
-    outputs: [
-      {
-        components: [
-          {
-            internalType: "bool",
-            name: "success",
-            type: "bool",
-          },
-          {
-            internalType: "bytes",
-            name: "returnData",
-            type: "bytes",
-          },
-        ],
-        internalType: "struct Multicall3.Result[]",
-        name: "returnData",
-        type: "tuple[]",
-      },
-    ],
-    stateMutability: "payable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        components: [
-          {
-            internalType: "address",
-            name: "target",
-            type: "address",
-          },
-          {
-            internalType: "bytes",
-            name: "callData",
-            type: "bytes",
-          },
-        ],
-        internalType: "struct Multicall3.Call[]",
-        name: "calls",
-        type: "tuple[]",
-      },
-    ],
-    name: "blockAndAggregate",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "blockNumber",
-        type: "uint256",
-      },
-      {
-        internalType: "bytes32",
-        name: "blockHash",
-        type: "bytes32",
-      },
-      {
-        components: [
-          {
-            internalType: "bool",
-            name: "success",
-            type: "bool",
-          },
-          {
-            internalType: "bytes",
-            name: "returnData",
-            type: "bytes",
-          },
-        ],
-        internalType: "struct Multicall3.Result[]",
-        name: "returnData",
-        type: "tuple[]",
-      },
-    ],
-    stateMutability: "payable",
-    type: "function",
-  },
-  {
+    type: "error",
     inputs: [],
-    name: "getBasefee",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "basefee",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
+    name: "CommitTooEarly",
   },
   {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "blockNumber",
-        type: "uint256",
-      },
-    ],
-    name: "getBlockHash",
-    outputs: [
-      {
-        internalType: "bytes32",
-        name: "blockHash",
-        type: "bytes32",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
+    type: "error",
     inputs: [],
-    name: "getBlockNumber",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "blockNumber",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
+    name: "InvalidReveal",
   },
   {
+    type: "error",
     inputs: [],
-    name: "getChainId",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "chainid",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
+    name: "RevealTooEarly",
   },
   {
+    type: "function",
     inputs: [],
-    name: "getCurrentBlockCoinbase",
+    name: "canCommit",
+    constant: true,
     outputs: [
       {
-        internalType: "address",
-        name: "coinbase",
-        type: "address",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "getCurrentBlockDifficulty",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "difficulty",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "getCurrentBlockGasLimit",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "gaslimit",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "getCurrentBlockTimestamp",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "timestamp",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "addr",
-        type: "address",
-      },
-    ],
-    name: "getEthBalance",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "balance",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "getLastBlockHash",
-    outputs: [
-      {
-        internalType: "bytes32",
-        name: "blockHash",
-        type: "bytes32",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "bool",
-        name: "requireSuccess",
+        name: "",
         type: "bool",
-      },
-      {
-        components: [
-          {
-            internalType: "address",
-            name: "target",
-            type: "address",
-          },
-          {
-            internalType: "bytes",
-            name: "callData",
-            type: "bytes",
-          },
-        ],
-        internalType: "struct Multicall3.Call[]",
-        name: "calls",
-        type: "tuple[]",
+        baseType: "bool",
+        components: null,
+        arrayLength: null,
+        arrayChildren: null,
       },
     ],
-    name: "tryAggregate",
-    outputs: [
-      {
-        components: [
-          {
-            internalType: "bool",
-            name: "success",
-            type: "bool",
-          },
-          {
-            internalType: "bytes",
-            name: "returnData",
-            type: "bytes",
-          },
-        ],
-        internalType: "struct Multicall3.Result[]",
-        name: "returnData",
-        type: "tuple[]",
-      },
-    ],
-    stateMutability: "payable",
-    type: "function",
+    stateMutability: "view",
+    payable: false,
+    gas: null,
   },
   {
-    inputs: [
-      {
-        internalType: "bool",
-        name: "requireSuccess",
-        type: "bool",
-      },
-      {
-        components: [
-          {
-            internalType: "address",
-            name: "target",
-            type: "address",
-          },
-          {
-            internalType: "bytes",
-            name: "callData",
-            type: "bytes",
-          },
-        ],
-        internalType: "struct Multicall3.Call[]",
-        name: "calls",
-        type: "tuple[]",
-      },
-    ],
-    name: "tryBlockAndAggregate",
+    type: "function",
+    inputs: [],
+    name: "canReveal",
+    constant: true,
     outputs: [
       {
-        internalType: "uint256",
-        name: "blockNumber",
-        type: "uint256",
-      },
-      {
-        internalType: "bytes32",
-        name: "blockHash",
-        type: "bytes32",
-      },
-      {
-        components: [
-          {
-            internalType: "bool",
-            name: "success",
-            type: "bool",
-          },
-          {
-            internalType: "bytes",
-            name: "returnData",
-            type: "bytes",
-          },
-        ],
-        internalType: "struct Multicall3.Result[]",
-        name: "returnData",
-        type: "tuple[]",
+        name: "",
+        type: "bool",
+        baseType: "bool",
+        components: null,
+        arrayLength: null,
+        arrayChildren: null,
       },
     ],
-    stateMutability: "payable",
+    stateMutability: "view",
+    payable: false,
+    gas: null,
+  },
+  {
     type: "function",
+    inputs: [
+      {
+        name: "hashValue",
+        type: "bytes32",
+        baseType: "bytes32",
+        components: null,
+        arrayLength: null,
+        arrayChildren: null,
+      },
+    ],
+    name: "commit",
+    constant: false,
+    outputs: [],
+    stateMutability: "nonpayable",
+    payable: false,
+    gas: null,
+  },
+  {
+    type: "function",
+    inputs: [],
+    name: "decimals",
+    constant: true,
+    outputs: [
+      {
+        name: "",
+        type: "uint8",
+        baseType: "uint8",
+        components: null,
+        arrayLength: null,
+        arrayChildren: null,
+      },
+    ],
+    stateMutability: "pure",
+    payable: false,
+    gas: null,
+  },
+  {
+    type: "function",
+    inputs: [],
+    name: "epochLength",
+    constant: true,
+    outputs: [
+      {
+        name: "",
+        type: "uint16",
+        baseType: "uint16",
+        components: null,
+        arrayLength: null,
+        arrayChildren: null,
+      },
+    ],
+    stateMutability: "pure",
+    payable: false,
+    gas: null,
+  },
+  {
+    type: "function",
+    inputs: [],
+    name: "getActiveEpoch",
+    constant: true,
+    outputs: [
+      {
+        name: "",
+        type: "uint256",
+        baseType: "uint256",
+        components: null,
+        arrayLength: null,
+        arrayChildren: null,
+      },
+    ],
+    stateMutability: "view",
+    payable: false,
+    gas: null,
+  },
+  {
+    type: "function",
+    inputs: [],
+    name: "getPrice",
+    constant: true,
+    outputs: [
+      {
+        name: "",
+        type: "uint256",
+        baseType: "uint256",
+        components: null,
+        arrayLength: null,
+        arrayChildren: null,
+      },
+    ],
+    stateMutability: "view",
+    payable: false,
+    gas: null,
+  },
+  {
+    type: "function",
+    inputs: [
+      {
+        name: "secret",
+        type: "uint256",
+        baseType: "uint256",
+        components: null,
+        arrayLength: null,
+        arrayChildren: null,
+      },
+      {
+        name: "price",
+        type: "uint256",
+        baseType: "uint256",
+        components: null,
+        arrayLength: null,
+        arrayChildren: null,
+      },
+    ],
+    name: "reveal",
+    constant: false,
+    outputs: [],
+    stateMutability: "nonpayable",
+    payable: false,
+    gas: null,
   },
 ] as const;
-
-export default getContract({
-  address: oracleAddress as `0x${string}`,
-  abi,
-  client: httpClient,
-});

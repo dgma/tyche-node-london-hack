@@ -1,20 +1,10 @@
-import { createClient, createPublicClient, webSocket, http } from "viem";
-import { privateKeyToAccount } from "viem/accounts";
-import chains from "./chains";
-import { node_pk, rpc, ws_rpc, network } from "./env";
+import { createPublicClient, http } from "viem";
 
-export const wsPublicClient = createPublicClient({
-  chain: chains[network],
-  transport: webSocket(ws_rpc),
-});
+import { baseSepolia } from "viem/chains";
+
+import { rpc } from "./env";
 
 export const httpPublicClient = createPublicClient({
-  chain: chains[network],
-  transport: http(rpc),
-});
-
-export const httpClient = createClient({
-  account: privateKeyToAccount(node_pk as `0x${string}`),
-  chain: chains[network],
+  chain: baseSepolia,
   transport: http(rpc),
 });
