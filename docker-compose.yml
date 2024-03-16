@@ -4,14 +4,85 @@ services:
   node1:
     build: .
     command: node oracle-nodes/node1
-    ports: ["4000:4000"]
+    ports: ["4001:4001"]
     env_file:
       - .env
       - src/oracle-nodes/node1/.env
   node2:
     build: .
     command: node oracle-nodes/node2
-    ports: ["4001:4001"]
+    ports: ["4002:4002"]
     env_file:
       - .env
       - src/oracle-nodes/node2/.env
+  node3:
+    build: .
+    command: node oracle-nodes/node3
+    ports: ["4003:4003"]
+    env_file:
+      - .env
+      - src/oracle-nodes/node3/.env
+  node4:
+    build: .
+    command: node oracle-nodes/node2
+    ports: ["4004:4004"]
+    env_file:
+      - .env
+      - src/oracle-nodes/node3/.env
+  node5:
+    build: .
+    command: node oracle-nodes/node5
+    ports: ["4005:4005"]
+    env_file:
+      - .env
+      - src/oracle-nodes/node5/.env
+  node6:
+    build: .
+    command: node oracle-nodes/node6
+    ports: ["4006:4006"]
+    env_file:
+      - .env
+      - src/oracle-nodes/node6/.env
+  node7:
+    build: .
+    command: node oracle-nodes/node7
+    ports: ["4007:4007"]
+    env_file:
+      - .env
+      - src/oracle-nodes/node7/.env
+  node8:
+    build: .
+    command: node oracle-nodes/node8
+    ports: ["4008:4008"]
+    env_file:
+      - .env
+      - src/oracle-nodes/node8/.env
+  node9:
+    build: .
+    command: node oracle-nodes/node9
+    ports: ["4009:4009"]
+    env_file:
+      - .env
+      - src/oracle-nodes/node9/.env
+  node10:
+    build: .
+    command: node oracle-nodes/node10
+    ports: ["4010:4010"]
+    env_file:
+      - .env
+      - src/oracle-nodes/node10/.env
+  node11:
+    build: .
+    command: node oracle-nodes/node11
+    ports: ["4011:4011"]
+    env_file:
+      - .env
+      - src/oracle-nodes/node11/.env
+  node12:
+    build: .
+    command: node oracle-nodes/node12
+    ports: ["4012:4012"]
+    env_file:
+      - .env
+      - src/oracle-nodes/node12/.env
+
