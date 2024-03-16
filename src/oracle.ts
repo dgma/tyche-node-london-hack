@@ -1,5 +1,6 @@
 // import { httpPublicClient } from "./clients";
 // import { multicall } from "./contracts";
+import * as crypto from "crypto";
 import { canCommit, commit } from "./commit";
 import { fetchCexPrice, getCexPrice } from "./getCexPrice";
 import { canReveal, reveal } from "./reveal";
