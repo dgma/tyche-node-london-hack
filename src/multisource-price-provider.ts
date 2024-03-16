@@ -2,7 +2,7 @@ import { parseUnits } from "viem";
 
 import { apininjasKey, coinmarketcapKey } from "./env";
 
-type PriceSource = "CoinMarketCap" | "ApiNinjas" | "RandomPriceGenerator";
+type PriceSource = "CoinMarketCap" | "ApiNinjas";
 export interface PriceInfo {
   price: bigint;
   source: PriceSource;
@@ -16,7 +16,6 @@ let priceSource: PriceSource | null = null;
 const PRICE_SOURCES: Record<PriceSource, (abortController: AbortController) => Promise<void>> = {
   CoinMarketCap: fetchCoinMarketCaprice,
   ApiNinjas: fetchApiNinjasPrice,
-  RandomPriceGenerator: generateRandomPrice,
 };
 const PRICE_SOURCES_KEYS = Object.keys(PRICE_SOURCES) as PriceSource[];
 
@@ -41,7 +40,7 @@ export const getPriceInfo = async () => {
       }
     }, INTERVAL_MS);
   }
-  return { price: price ?? 0n, source: priceSource ?? "RandomPriceGenerator" };
+  return { price: price ?? 0n, source: priceSource ?? "ApiNinjas" };
 };
 
 async function fetchPriceFromRandomSource(abortController: AbortController) {
@@ -80,11 +79,6 @@ async function fetchApiNinjasPrice(abortController: AbortController) {
     price = parseUnits(value.toString(), 8);
     priceSource = "ApiNinjas";
   }
-}
-
-async function generateRandomPrice() {
-  price = parseUnits((Math.random() * 10000).toString(), 8);
-  priceSource = "RandomPriceGenerator";
 }
 
 function isAbortError(error: any): error is Error {
