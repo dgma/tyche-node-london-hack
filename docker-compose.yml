@@ -2,8 +2,10 @@ version: "3.7"
 
 services:
   api-ninjas-oracle:
-    build: oracle-nodes/api-ninjas
+    build: .
+    command: node oracle-nodes/api-ninjas.js
     ports: ["4000:4000"]
   coinmarketcap-oracle:
-    build: oracle-nodes/coinmarketcap
+    build: .
+    command: node oracle-nodes/coinmarketcap.js
     ports: ["4001:4001"]

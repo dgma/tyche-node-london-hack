@@ -30,5 +30,3 @@ RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 automation-nodejs
 
 USER automation-nodejs
-
-CMD ["node", "index.js"]
