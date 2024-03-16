@@ -2,7 +2,9 @@
 
 # Decentralized Oracle Node
 
-Development starter kit for node.js ts web3 automation nodes
+Implementation of the Oracle node that utilizes commit/reveal mechanism to update the Oracle contract with the current price from random sources.
+
+[NOTE] This implementation is for the demo purposes only.
 
 ## Local Development
 
