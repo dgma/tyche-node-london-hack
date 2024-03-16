@@ -1,8 +1,8 @@
 // import { httpPublicClient } from "./clients";
 // import { multicall } from "./contracts";
-import {fetchCexPrice, getCexPrice} from "./getCexPrice";
-import {canCommit, commit} from "./commit";
-import {canReveal, reveal} from "./reveal"
+import { canCommit, commit } from "./commit";
+import { fetchCexPrice, getCexPrice } from "./getCexPrice";
+import { canReveal, reveal } from "./reveal";
 
 async function main() {
   initPriceUpdate();
@@ -10,15 +10,15 @@ async function main() {
 }
 
 function initPriceUpdate() {
-  setInterval(async() => {
+  setInterval(async () => {
     await fetchCexPrice();
-  }, 5000)
+  }, 5000);
 }
 
 function initCommitReveal() {
-  let commitInterval: ReturnType<typeof setInterval> = setInterval(async() => {
-    if(await canCommit()) {
-      clearInterval(commitInterval)
+  let commitInterval: ReturnType<typeof setInterval> = setInterval(async () => {
+    if (await canCommit()) {
+      clearInterval(commitInterval);
       const price = await getCexPrice();
       const currentSecret = crypto.randomUUID();
       await commit(price, currentSecret);
@@ -29,12 +29,12 @@ function initCommitReveal() {
 
 function setReveal(price: bigint, secret: string) {
   let checker = setInterval(async () => {
-    if(await canReveal()) {
-     await reveal(price, secret);
-     clearInterval(checker);
-     initCommitReveal();
+    if (await canReveal()) {
+      await reveal(price, secret);
+      clearInterval(checker);
+      initCommitReveal();
     }
-  }, 6000)
+  }, 6000);
 }
 
 main();
