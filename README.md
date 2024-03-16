@@ -4,7 +4,11 @@
 
 Implementation of the Oracle node that utilizes commit/reveal mechanism to update the Oracle contract with the current price from random sources.
 
+This repo contains a docker compose configuration to run 12 nodes in parrallel
+
 [NOTE] This implementation is for the demo purposes only.
+
+![image info](./docs/demo.png)
 
 ## Local Development
 
