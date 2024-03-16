@@ -7,13 +7,13 @@ const getCommitHash = (price: bigint, secret: string): string => {
 }
 
 export const canCommit = async (): Promise<boolean> => {
-  console.log('can commit')
+  console.log(process.pid, 'can commit')
   return Promise.resolve(true);
   // return oracle.read.canCommit();
 }
 
 export const commit = async (price: bigint, secret: string): Promise<void> => {
-  console.log('commiting', price,'****', secret)
+  console.log(process.pid, 'commiting', price,'****', secret)
   return Promise.resolve();
   // return oracle.commit(getCommitHash(price, secret));
 }

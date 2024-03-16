@@ -3,7 +3,7 @@ version: "3.7"
 services:
   automation-node:
     hostname: automation-node
-    image: automation-node
+    image: node
     restart: always
     build:
       context: .

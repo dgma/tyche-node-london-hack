@@ -18,7 +18,7 @@ export const fetchCMPrice = async () => {
 
 const setANPrice = (payload: Record<string, any>) => {
   const price = payload.price as number;
-  console.log('setting price', price);
+  console.log(process.pid, 'setting price', price);
   cexPrice = parseUnits(price.toString(), 8);
 }
 export const fetchANPrice = async () => {
@@ -35,7 +35,7 @@ export const fetchANPrice = async () => {
 
 const setCMPrice = (payload: Record<string, any>): void => {
   const price = payload.data['1027'].quote['USD'].price as number;
-  console.log('setting price', price);
+  console.log(process.pid, 'setting price', price);
   cexPrice = parseUnits(price.toString(), 8);
 }
 
