@@ -1,17 +1,17 @@
 version: "3.7"
 
 services:
-  api-ninjas-oracle:
+  node1:
     build: .
-    command: node oracle-nodes/api-ninjas
+    command: node oracle-nodes/node1
     ports: ["4000:4000"]
     env_file:
       - .env
-      - src/oracle-nodes/api-ninjas/.env
-  coinmarketcap-oracle:
+      - src/oracle-nodes/node1/.env
+  node2:
     build: .
-    command: node oracle-nodes/coinmarketcap
+    command: node oracle-nodes/node2
     ports: ["4001:4001"]
     env_file:
       - .env
-      - src/oracle-nodes/coinmarketcap/.env
+      - src/oracle-nodes/node2/.env

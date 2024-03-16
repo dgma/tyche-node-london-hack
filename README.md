@@ -32,10 +32,10 @@ NETWORK="baseSepolia"
 APININJAS_KEY="<api_key_here>"
 ```
 
-2. Create a `.env` file for each node implementation under the `src/oracle-nodes` folder the following environment variables specified
+2. Create a `.env` file for each node implementation under the `src/oracle-nodes/*` folder the following environment variables specified
 
 ```
-# src/oracle-nodes/coinmarketcap
+# src/oracle-nodes/node1
 
 # Node primary key
 NODE_PK="<primary_key_here>"
@@ -44,7 +44,7 @@ NODE_PK="<primary_key_here>"
 3. Now you can run any of the nodes locally. For example
 
 ```
-npx ts-node src/oracle-nodes/api-ninjas
+npx ts-node src/oracle-nodes/node1
 ```
 
 Or you can run all of the nodes together with docker-compose
