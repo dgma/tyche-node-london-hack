@@ -4,7 +4,7 @@
   "description": "Development starter kit for node.js ts web3 automation nodes",
   "main": "index.js",
   "scripts": {
-    "dev": "ts-node src",
+    "dev": "ts-node src/oracle-nodes/node1",
     "test": "jest --passWithNoTests",
     "lint": "eslint src/**/*.ts",
     "prepare": "husky install",

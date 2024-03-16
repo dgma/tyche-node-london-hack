@@ -1,4 +1,4 @@
-export const address = "0x4A04237FD080A6123f394de010EBd5651297c6F4";
+export const address = "0xbB40D036BCfb6cc705dD29f336Fd515b1b99c3fc";
 
 export const abi = [
   {
@@ -100,8 +100,8 @@ export const abi = [
     outputs: [
       {
         name: "",
-        type: "uint16",
-        baseType: "uint16",
+        type: "uint32",
+        baseType: "uint32",
         components: null,
         arrayLength: null,
         arrayChildren: null,
@@ -151,6 +151,35 @@ export const abi = [
   },
   {
     type: "function",
+    inputs: [],
+    name: "priceCommetiSize",
+    constant: true,
+    outputs: [
+      {
+        name: "",
+        type: "uint16",
+        baseType: "uint16",
+        components: null,
+        arrayLength: null,
+        arrayChildren: null,
+      },
+    ],
+    stateMutability: "pure",
+    payable: false,
+    gas: null,
+  },
+  {
+    type: "function",
+    inputs: [],
+    name: "register",
+    constant: false,
+    outputs: [],
+    stateMutability: "nonpayable",
+    payable: false,
+    gas: null,
+  },
+  {
+    type: "function",
     inputs: [
       {
         name: "secret",
@@ -170,6 +199,16 @@ export const abi = [
       },
     ],
     name: "reveal",
+    constant: false,
+    outputs: [],
+    stateMutability: "nonpayable",
+    payable: false,
+    gas: null,
+  },
+  {
+    type: "function",
+    inputs: [],
+    name: "unRegister",
     constant: false,
     outputs: [],
     stateMutability: "nonpayable",
