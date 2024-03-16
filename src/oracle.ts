@@ -1,15 +1,13 @@
-// import { fetchCexPrice } from "./getCexPrice";
 import * as commitReveal from "./commit-reveal";
+import * as multisourcePriceProvider from "./multisource-price-provider";
 
 async function main() {
-  // initPriceUpdate();
+  await preHeatPriceProvider();
   commitReveal.start();
 }
 
-// function initPriceUpdate() {
-//   setInterval(async () => {
-//     await fetchCexPrice();
-//   }, 10000);
-// }
+function preHeatPriceProvider() {
+  return multisourcePriceProvider.getPriceInfo();
+}
 
 main();

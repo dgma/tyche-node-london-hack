@@ -3,7 +3,7 @@ import { encodeAbiParameters, keccak256, parseAbiParameters, toHex } from "viem"
 
 import { httpPublicClient } from "./clients";
 import * as OracleContract from "./contracts/oracle";
-import { getCexPrice } from "./getCexPrice";
+import * as multisourcePriceProvider from "./multisource-price-provider";
 
 export const start = () => {
   waitForCommitPhase();
@@ -16,10 +16,10 @@ const waitForCommitPhase = () => {
     if (await canCommit()) {
       console.log("[commit-reveal]:", "Commiting price...");
       clearInterval(intervalId);
-      const price = await getCexPrice();
-      const currentSecret = crypto.randomUUID();
-      await commit(price, currentSecret);
-      waitForRevealPhase(price, currentSecret);
+      const priceInfo = await multisourcePriceProvider.getPriceInfo();
+      const secret = crypto.randomUUID();
+      await commit(priceInfo.price ?? 0n, secret);
+      waitForRevealPhase(priceInfo.price ?? 0n, secret);
     }
   }, 10000);
 };
@@ -58,7 +58,7 @@ const canReveal = async () => {
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const commit = async (price: bigint, secret: string): Promise<void> => {
   // return oracle.commit(getCommitHash(price, secret));
-  console.log("[commit-reveal]:", "Commited price ✅");
+  console.log("[commit-reveal]:", `Commited price "${price}"" ✅`);
 };
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
