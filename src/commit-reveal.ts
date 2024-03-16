@@ -6,6 +6,8 @@ import { account, httpPublicClient, walletClient } from "./config";
 import * as OracleContract from "./contracts/oracle";
 import * as multisourcePriceProvider from "./multisource-price-provider";
 
+const INTERVAL_MS = 3000;
+
 export const start = () => {
   waitForCommitPhase();
 };
@@ -22,7 +24,7 @@ const waitForCommitPhase = () => {
       await commit(priceInfo.price ?? 0n, seed);
       waitForRevealPhase(priceInfo.price ?? 0n, seed);
     }
-  }, 10000);
+  }, INTERVAL_MS);
 };
 
 const waitForRevealPhase = async (price: bigint, secret: bigint) => {
@@ -35,7 +37,7 @@ const waitForRevealPhase = async (price: bigint, secret: bigint) => {
       clearInterval(intervalId);
       waitForCommitPhase();
     }
-  }, 10000);
+  }, INTERVAL_MS);
 };
 
 const canCommit = async (): Promise<boolean> => {
