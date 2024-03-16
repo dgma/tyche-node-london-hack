@@ -1,4 +1,6 @@
+import chalk from "chalk";
 import { parseUnits } from "viem";
+
 import { apininjasKey, coinmarketcapKey } from "./env";
 
 type PriceSource = "CoinMarketCap" | "ApiNinjas" | "RandomPriceGenerator";
@@ -21,11 +23,11 @@ export const getPriceInfo = async () => {
 };
 
 async function fetchPriceFromRandomSource() {
-  console.log("[price-provider]:", "Updating price ⏳");
+  log("Updating price ⏳");
   const randomIndex = Math.floor(Math.random() * 10) % PRICE_SOURCES_KEYS.length;
   const strategyName = PRICE_SOURCES_KEYS[randomIndex];
   await PRICE_SOURCES[strategyName]();
-  console.log("[price-provider]:", "Price successfully updated 🪙");
+  log("Price successfully updated 🪙");
 }
 
 async function fetchCoinMarketCaprice() {
@@ -61,4 +63,8 @@ async function fetchApiNinjasPrice() {
 async function generateRandomPrice() {
   price = parseUnits((Math.random() * 10000).toString(), 8);
   priceSource = "RandomPriceGenerator";
+}
+
+function log(message: string) {
+  console.log(chalk.cyan("[price-provider]:"), message);
 }

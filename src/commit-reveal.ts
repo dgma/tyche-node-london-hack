@@ -1,4 +1,5 @@
 import * as crypto from "crypto";
+import chalk from "chalk";
 import { encodeAbiParameters, keccak256, parseAbiParameters, toHex } from "viem";
 
 import { httpPublicClient } from "./clients";
@@ -10,11 +11,11 @@ export const start = () => {
 };
 
 const waitForCommitPhase = () => {
-  console.log("[commit-reveal]:", "Waiting for COMMIT phase ⏳");
+  log("Waiting for COMMIT phase ⏳");
 
   const intervalId: ReturnType<typeof setInterval> = setInterval(async () => {
     if (await canCommit()) {
-      console.log("[commit-reveal]:", "Commiting price...");
+      log("Commiting price...");
       clearInterval(intervalId);
       const priceInfo = await multisourcePriceProvider.getPriceInfo();
       const secret = crypto.randomUUID();
@@ -25,11 +26,11 @@ const waitForCommitPhase = () => {
 };
 
 const waitForRevealPhase = async (price: bigint, secret: string) => {
-  console.log("[commit-reveal]:", "Waiting for REVEAL phase ⏳");
+  log("Waiting for REVEAL phase ⏳");
 
   const intervalId = setInterval(async () => {
     if (await canReveal()) {
-      console.log("[commit-reveal]:", "Revealing price...");
+      log("Revealing price...");
       await reveal(price, secret);
       clearInterval(intervalId);
       waitForCommitPhase();
@@ -58,17 +59,21 @@ const canReveal = async () => {
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const commit = async (price: bigint, secret: string): Promise<void> => {
   // return oracle.commit(getCommitHash(price, secret));
-  console.log("[commit-reveal]:", `Commited price "${price}"" ✅`);
+  log(`Commited price "${price}"" ✅`);
 };
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const reveal = (price: bigint, secret: string) => {
   // return oracle.reveal(encodeAbiParameters(parseAbiParameters('uint256 price, bytes32 secret'),
   //     [price, toHex(secret)]));
-  console.log("[commit-reveal]:", "Price revealed 🃏");
+  log("Price revealed 🃏");
 };
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const getCommitHash = (price: bigint, secret: string): string => {
   return keccak256(encodeAbiParameters(parseAbiParameters("uint256 price, bytes32 secret"), [price, toHex(secret)]));
 };
+
+function log(message: string) {
+  console.log(chalk.greenBright("[commit-reveal]:"), message);
+}
