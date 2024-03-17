@@ -79,44 +79,24 @@ services:
       - .env
       - src/oracle-nodes/node8/.env
     restart: always
-  # node9:
-  #   build: .
-  #   depends_on: 
-  #    - node8
-  #   command: node oracle-nodes/node9
-  #   ports: ["4009:4009"]
-  #   env_file:
-  #     - .env
-  #     - src/oracle-nodes/node9/.env
-  #   restart: always
-  # node10:
-  #   build: .
-  #   depends_on: 
-  #    - node9
-  #   command: node oracle-nodes/node10
-  #   ports: ["4010:4010"]
-  #   env_file:
-  #     - .env
-  #     - src/oracle-nodes/node10/.env
-  #   restart: always
-  # node11:
-  #   build: .
-  #   depends_on: 
-  #    - node10
-  #   command: node oracle-nodes/node11
-  #   ports: ["4011:4011"]
-  #   env_file:
-  #     - .env
-  #     - src/oracle-nodes/node11/.env
-  #   restart: always
-  # node12:
-  #   build: .
-  #   depends_on: 
-  #    - node11
-  #   command: node oracle-nodes/node12
-  #   ports: ["4012:4012"]
-  #   env_file:
-  #     - .env
-  #     - src/oracle-nodes/node12/.env
-  #   restart: always
+  node9:
+    build: .
+    depends_on: 
+     - node8
+    command: node oracle-nodes/node9
+    ports: ["4009:4009"]
+    env_file:
+      - .env
+      - src/oracle-nodes/node9/.env
+    restart: always
+  node10:
+    build: .
+    depends_on: 
+     - node9
+    command: node oracle-nodes/node10
+    ports: ["4010:4010"]
+    env_file:
+      - .env
+      - src/oracle-nodes/node10/.env
+    restart: always
 

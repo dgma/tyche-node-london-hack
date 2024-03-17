@@ -4,12 +4,10 @@ function randomIntFromInterval(min: number, max: number) {
 }
 
 export const sleepRandomTime = () => {
+  const timeout = randomIntFromInterval(1, 4) * 1000;
   return new Promise((resolve) => {
-    setTimeout(
-      () => {
-        resolve("resolve");
-      },
-      randomIntFromInterval(1, 4) * 1000,
-    );
+    setTimeout(() => {
+      resolve("resolve");
+    }, timeout);
   });
 };

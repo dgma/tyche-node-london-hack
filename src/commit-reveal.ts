@@ -8,7 +8,7 @@ import * as multisourcePriceProvider from "./multisource-price-provider";
 import { type PriceInfo } from "./multisource-price-provider";
 import { sleepRandomTime } from "./sleep";
 
-const INTERVAL_MS = 5000;
+const INTERVAL_MS = 6000;
 
 const register = async () => {
   log("Register Node..");
@@ -81,26 +81,24 @@ const canReveal = async () => {
 
 const commit = async (price: bigint, secret: bigint): Promise<void> => {
   await sleepRandomTime();
-  const { request } = await httpPublicClient.simulateContract({
+
+  await walletClient.writeContract({
     ...OracleContract,
     account,
     functionName: "commit",
     args: [getCommitHash(price, secret)],
   });
-
-  await walletClient.writeContract(request);
 };
 
 const reveal = async (price: bigint, secret: bigint) => {
   await sleepRandomTime();
-  const { request } = await httpPublicClient.simulateContract({
+
+  await walletClient.writeContract({
     ...OracleContract,
     account,
     functionName: "reveal",
     args: [secret, price],
   });
-
-  await walletClient.writeContract(request);
 };
 
 const getCommitHash = (price: bigint, secret: bigint): string => {
